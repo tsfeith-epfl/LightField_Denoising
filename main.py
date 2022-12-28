@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # Parse arguments
     parser = argparse.ArgumentParser(description='Argparser')
     parser.add_argument("--denoising_method",
-                        default="bm3d",
+                        required=True,
                         type=str,
                         help="Denoising method to use",
                         choices=["bm3d", "lfbm5d", "wavelets", "dncnn", "lfdnpatch"])
