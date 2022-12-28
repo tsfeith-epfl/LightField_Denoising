@@ -1,0 +1,3 @@
+[submodule "denoising_methods/LFDnPatch/LF-PatchMatch"]
+	path = denoising_methods/LFDnPatch/LF-PatchMatch
+	url = https://www.github.com/tsfeith-epfl/LF-PatchMatch.git
