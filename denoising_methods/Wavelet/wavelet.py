@@ -10,4 +10,5 @@ def wavelet_denoising(img):
     im_bayes = denoise_wavelet(img, channel_axis=-1, convert2ycbcr=True,
                                method='BayesShrink', mode='soft',
                                rescale_sigma=True)
+    im_bayes = np.clip(im_bayes, 0, 1)
     return im_bayes
