@@ -37,4 +37,5 @@ def lfdnpatch(noisy_img):
     img = img.double()
     img = model(img)
     img = img.squeeze(0).permute(1, 2, 0).cpu().numpy()
+    img = np.clip(img, 0, 1)
     return img

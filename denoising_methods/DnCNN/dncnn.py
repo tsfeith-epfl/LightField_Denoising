@@ -40,4 +40,5 @@ def dncnn(noisy_imgs):
         img = torch.from_numpy(img).unsqueeze(0).permute(0, 3, 1, 2).to(device)
         img = model(img)
         img = img.squeeze(0).permute(1, 2, 0).cpu().numpy()
+        img = np.clip(img, 0, 1)
         yield img
