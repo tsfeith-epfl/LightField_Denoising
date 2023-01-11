@@ -37,7 +37,7 @@ if __name__ == '__main__':
     parser.add_argument("--output_dir",
                         default='',
                         type=str,
-                        help="Custom output directory for denoised images. Only used if --save_imgs is not set")
+                        help="Custom output directory for denoised images.")
     parser.add_argument("--quality_metric",
                         type=str,
                         help="Image Quality Assessment metric to use",
@@ -50,10 +50,28 @@ if __name__ == '__main__':
                         help="Choose how many imags to use to estimate the noise level. Use 0 to use all images",
                         default=0)
     parser.add_argument("--grid_limit",
-                        help="Limit the dimensions of the image grid. Set to 0 to use all images. Give one or two values.",
+                        help="Limit the dimensions of the image grid. Set to 0 to use all images. Give one or two "
+                             "values.",
                         nargs='+',
                         type=int,
                         default=[0, 0])
+    parser.add_argument("--patch_size",
+                        help="Patch size for LFDnPatch",
+                        type=int,
+                        default=20)
+    parser.add_argument("--patch_stride",
+                        help="Patch stride for LFDnPatch",
+                        type=int,
+                        default=1)
+    parser.add_argument("--number_patches",
+                        help="Number of patches for LFDnPatch. Note: a different number of patches requires a new "
+                             "trained model",
+                        type=int,
+                        default=6)
+    parser.add_argument("--search_space",
+                        help="Search space for LFDnPatch",
+                        type=int,
+                        default=10)
 
     args = parser.parse_args()
 
@@ -189,6 +207,14 @@ if __name__ == '__main__':
         end_time = time.time()
 
     if args.denoising_method == "lfdnpatch":
+        if args.patch_size <= 0:
+            raise ValueError("patch_size must be positive")
+        if args.patch_stride <= 0:
+            raise ValueError("patch_stride must be positive")
+        if args.number_patches <= 0:
+            raise ValueError("number_patches must be positive")
+        if args.search_space <= 0:
+            raise ValueError("search_space must be positive")
         # measure execution time
         start_time = time.time()
 
@@ -202,7 +228,7 @@ if __name__ == '__main__':
 
         # run the executable ./denoising_methods/LFDnPatch/LF-PatchMatch/build/PatchMatch
         print("Computing the Frankenpatches")
-        p = Popen(f"./denoising_methods/LFDnPatch/LF-PatchMatch/build/PatchMatch {full_img_dir} {full_size[0]} {full_size[1]} {20} {6} {1} {10}",
+        p = Popen(f"./denoising_methods/LFDnPatch/LF-PatchMatch/build/PatchMatch {full_img_dir} {full_size[0]} {full_size[1]} {args.patch_size} {args.number_patches} {args.patch_stride} {args.search_space}",
                   stdout=PIPE)
 
         end_time = time.time()
