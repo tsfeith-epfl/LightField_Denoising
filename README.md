@@ -87,7 +87,7 @@ There are other possible parameters, but these are the only required ones. To se
 ## Replicate Results
 
 To replicate the results shown in the report, 3 bash scripts are provided. They are located in the `./scripts` folder.
-However, they are not ready to be run as-is, as the scenes called in the scripts are not all provided. To get the 
-original scenes, download them from ???, place them in the `./data/clean` folder and follow the structure necessary
-for the scripts to pass.
-Alternatively, you may edit the scenes and the input and output paths used in the scripts to your liking.
+However, they are not ready to be run as-is, as the scenes called in the scripts are not all provided. Place your own
+scenes in the `./data/clean` folder, and adjust the scripts accordingly. Use the `./data/noise_generator.py` file to
+generate the noisy images with different noise strengths and types, and the `./data/multi_scale_generator.py` to create
+the downscaled versions of each scene.
