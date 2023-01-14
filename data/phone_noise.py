@@ -1,7 +1,7 @@
 import numpy as np
-from scipy.interpolate import interp1d
 import scipy.io as sio
 from PIL import Image
+from scipy.interpolate import interp1d
 
 
 def inv_sampling(x, bin_width=0.00001, test_samples=500):
@@ -125,6 +125,7 @@ def add_noise(img, a_array, b_array):
 
 def to_image_from_array(a):
     return Image.fromarray((a * 255.0).round().clip(0, 255).astype(np.uint8))
+
 
 """
 def add_noise(img, params):

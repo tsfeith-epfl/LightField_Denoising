@@ -1,15 +1,17 @@
-import phone_noise # adapted from https://gitlab.com/wg1/jpeg-ai/jpeg-ai-anchors/-/tree/main/Denoising/noise_generator
-import blur_noise # adapted from https://github.com/LeviBorodenko/motionblur/blob/master/motionblur.py
 import argparse
-import os
 import glob
+import os
+import sys
+
 import numpy as np
 from PIL import Image
-from tqdm import tqdm
-from skimage.restoration import estimate_sigma
 from pytimedinput import timedInput
+from skimage.restoration import estimate_sigma
+from tqdm import tqdm
 
-import sys
+import blur_noise  # adapted from https://github.com/LeviBorodenko/motionblur/blob/master/motionblur.py
+import phone_noise  # adapted from https://gitlab.com/wg1/jpeg-ai/jpeg-ai-anchors/-/tree/main/Denoising/noise_generator
+
 sys.path.append('..')
 from utilities import estimate_noise
 
@@ -51,7 +53,9 @@ def test_noise(img_path, noise_type, params, noise_strength=None):
                 else:
                     continue
 
-            accept, timed_out = timedInput(f"Estimated noise sigma is {noise_estimate*255:.4f} ({category}). Is this acceptable? [y] / n\n\t", 10)
+            accept, timed_out = timedInput(
+                f"Estimated noise sigma is {noise_estimate * 255:.4f} ({category}). Is this acceptable? [y] / n\n\t",
+                10)
             if timed_out:
                 accept = 'y'
             if accept == 'y':
@@ -67,7 +71,8 @@ def test_noise(img_path, noise_type, params, noise_strength=None):
                 if noise_strength == 'hard' and strength > 0.07:
                     return strength
             else:
-                accept, timed_out = timedInput(f"Estimated noise sigma is {strength*255:.4f}. Is this acceptable? [y] / n\n\t", 10)
+                accept, timed_out = timedInput(
+                    f"Estimated noise sigma is {strength * 255:.4f}. Is this acceptable? [y] / n\n\t", 10)
                 if timed_out:
                     accept = 'y'
                 if accept == 'y':
@@ -110,7 +115,7 @@ def generate_noisy_imgs(clean_imgs, noise_type, kargs):
     else:
         raise NotImplementedError
 
-    noise_estimate = estimate_noise(noisy_paths, 0)*255
+    noise_estimate = estimate_noise(noisy_paths, 0) * 255
     # write noise estimate to file next to images
     with open(os.path.join(os.path.dirname(noisy_paths[0]), 'noise_estimate.txt'), 'w') as f:
         f.write("Estimated noise variance is " + str(noise_estimate) + ".")

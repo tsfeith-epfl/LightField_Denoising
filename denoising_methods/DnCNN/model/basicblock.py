@@ -1,8 +1,6 @@
 from collections import OrderedDict
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
 
+import torch.nn as nn
 
 '''
 # --------------------------------------------
@@ -38,11 +36,14 @@ def sequential(*args):
 # --------------------------------------------
 # return nn.Sequantial of (Conv + BN + ReLU)
 # --------------------------------------------
-def conv(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=True, mode='CBR', negative_slope=0.2):
+def conv(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=True, mode='CBR',
+         negative_slope=0.2):
     L = []
     for t in mode:
         if t == 'C':
-            L.append(nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias))
+            L.append(
+                nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size, stride=stride,
+                          padding=padding, bias=bias))
         elif t == 'B':
             L.append(nn.BatchNorm2d(out_channels, momentum=0.9, eps=1e-04, affine=True))
         elif t == 'R':

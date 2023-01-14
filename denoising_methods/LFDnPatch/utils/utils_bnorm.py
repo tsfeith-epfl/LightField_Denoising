@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 
-
 """
 # --------------------------------------------
 # Batch Normalization
@@ -36,7 +35,9 @@ def merge_bn(model):
     '''
     prev_m = None
     for k, m in list(model.named_children()):
-        if (isinstance(m, nn.BatchNorm2d) or isinstance(m, nn.BatchNorm1d)) and (isinstance(prev_m, nn.Conv2d) or isinstance(prev_m, nn.Linear) or isinstance(prev_m, nn.ConvTranspose2d)):
+        if (isinstance(m, nn.BatchNorm2d) or isinstance(m, nn.BatchNorm1d)) and (
+                isinstance(prev_m, nn.Conv2d) or isinstance(prev_m, nn.Linear) or isinstance(prev_m,
+                                                                                             nn.ConvTranspose2d)):
 
             w = prev_m.weight.data
 

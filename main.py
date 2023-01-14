@@ -1,18 +1,17 @@
 import argparse
 import glob
 import os
+import time
 from subprocess import Popen, PIPE
 
 import numpy as np
-from tqdm import tqdm
 from PIL import Image
-import time
+from tqdm import tqdm
 
 import utilities
-from denoising_methods.Wavelet.wavelet import wavelet_denoising
 from denoising_methods.DnCNN.dncnn import dncnn
 from denoising_methods.LFDnPatch.lfdnpatch import lfdnpatch
-
+from denoising_methods.Wavelet.wavelet import wavelet_denoising
 from metrics_only import compute_metrics
 
 if __name__ == '__main__':
@@ -228,8 +227,9 @@ if __name__ == '__main__':
 
         # run the executable ./denoising_methods/LFDnPatch/LF-PatchMatch/build/PatchMatch
         print("Computing the Frankenpatches")
-        p = Popen(f"./denoising_methods/LFDnPatch/LF-PatchMatch/build/PatchMatch {full_img_dir} {full_size[0]} {full_size[1]} {args.patch_size} {args.number_patches} {args.patch_stride} {args.search_space}",
-                  stdout=PIPE)
+        p = Popen(
+            f"./denoising_methods/LFDnPatch/LF-PatchMatch/build/PatchMatch {full_img_dir} {full_size[0]} {full_size[1]} {args.patch_size} {args.number_patches} {args.patch_stride} {args.search_space}",
+            stdout=PIPE)
 
         end_time = time.time()
         with open(os.path.join(output_dir, "execution_time.txt"), "w") as f:

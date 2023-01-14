@@ -1,7 +1,6 @@
-import sys
 import datetime
 import logging
-
+import sys
 
 '''
 # --------------------------------------------

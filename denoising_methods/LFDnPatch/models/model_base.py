@@ -1,17 +1,18 @@
 import os
+
 import torch
 import torch.nn as nn
-from utils.utils_bnorm import merge_bn, tidy_sequential
 from torch.nn.parallel import DataParallel, DistributedDataParallel
+from utils.utils_bnorm import merge_bn, tidy_sequential
 
 
 class ModelBase():
     def __init__(self, opt):
-        self.opt = opt                         # opt
+        self.opt = opt  # opt
         self.save_dir = opt['path']['models']  # save models
         self.device = torch.device('cuda' if opt['gpu_ids'] is not None else 'cpu')
-        self.is_train = opt['is_train']        # training or not
-        self.schedulers = []                   # schedulers
+        self.is_train = opt['is_train']  # training or not
+        self.schedulers = []  # schedulers
 
     """
     # ----------------------------------------
@@ -104,7 +105,8 @@ class ModelBase():
         if self.opt['dist']:
             find_unused_parameters = self.opt.get('find_unused_parameters', True)
             use_static_graph = self.opt.get('use_static_graph', False)
-            network = DistributedDataParallel(network, device_ids=[torch.cuda.current_device()], find_unused_parameters=find_unused_parameters)
+            network = DistributedDataParallel(network, device_ids=[torch.cuda.current_device()],
+                                              find_unused_parameters=find_unused_parameters)
             if use_static_graph:
                 print('Using static graph. Make sure that "unused parameters" will not change during training loop.')
                 network._set_static_graph()
@@ -129,11 +131,13 @@ class ModelBase():
     def describe_params(self, network):
         network = self.get_bare_model(network)
         msg = '\n'
-        msg += ' | {:^6s} | {:^6s} | {:^6s} | {:^6s} || {:<20s}'.format('mean', 'min', 'max', 'std', 'shape', 'param_name') + '\n'
+        msg += ' | {:^6s} | {:^6s} | {:^6s} | {:^6s} || {:<20s}'.format('mean', 'min', 'max', 'std', 'shape',
+                                                                        'param_name') + '\n'
         for name, param in network.state_dict().items():
             if not 'num_batches_tracked' in name:
                 v = param.data.clone().float()
-                msg += ' | {:>6.3f} | {:>6.3f} | {:>6.3f} | {:>6.3f} | {} || {:s}'.format(v.mean(), v.min(), v.max(), v.std(), v.shape, name) + '\n'
+                msg += ' | {:>6.3f} | {:>6.3f} | {:>6.3f} | {:>6.3f} | {} || {:s}'.format(v.mean(), v.min(), v.max(),
+                                                                                          v.std(), v.shape, name) + '\n'
         return msg
 
     """
@@ -170,7 +174,7 @@ class ModelBase():
             if param_key in state_dict_old.keys():
                 state_dict_old = state_dict_old[param_key]
             state_dict = network.state_dict()
-            for ((key_old, param_old),(key, param)) in zip(state_dict_old.items(), state_dict.items()):
+            for ((key_old, param_old), (key, param)) in zip(state_dict_old.items(), state_dict.items()):
                 state_dict[key] = param_old
             network.load_state_dict(state_dict, strict=True)
             del state_dict_old, state_dict
@@ -187,14 +191,15 @@ class ModelBase():
     # load the state_dict of the optimizer
     # ----------------------------------------
     def load_optimizer(self, load_path, optimizer):
-        optimizer.load_state_dict(torch.load(load_path, map_location=lambda storage, loc: storage.cuda(torch.cuda.current_device())))
+        optimizer.load_state_dict(
+            torch.load(load_path, map_location=lambda storage, loc: storage.cuda(torch.cuda.current_device())))
 
     def update_E(self, decay=0.999):
         netG = self.get_bare_model(self.netG)
         netG_params = dict(netG.named_parameters())
         netE_params = dict(self.netE.named_parameters())
         for k in netG_params.keys():
-            netE_params[k].data.mul_(decay).add_(netG_params[k].data, alpha=1-decay)
+            netE_params[k].data.mul_(decay).add_(netG_params[k].data, alpha=1 - decay)
 
     """
     # ----------------------------------------

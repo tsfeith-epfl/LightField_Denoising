@@ -1,22 +1,19 @@
-import os.path
-import math
 import argparse
-import random
-import numpy as np
 import logging
+import math
+import os.path
+import random
+
+import numpy as np
 import torch
 from torch.utils.data import DataLoader
-
-
-from utils import utils_logger
-from utils import utils_image as util
-from utils import utils_option as option
+from torch.utils.tensorboard import SummaryWriter
 
 from data.select_dataset import define_Dataset
 from models.select_model import define_Model
-
-from torch.utils.tensorboard import SummaryWriter
-
+from utils import utils_image as util
+from utils import utils_logger
+from utils import utils_option as option
 
 '''
 # --------------------------------------------
@@ -84,7 +81,7 @@ def main(json_path='options/train_dncnn.json'):
     # configure logger
     # ----------------------------------------
     logger_name = 'train'
-    utils_logger.logger_info(logger_name, os.path.join(opt['path']['log'], logger_name+'.log'))
+    utils_logger.logger_info(logger_name, os.path.join(opt['path']['log'], logger_name + '.log'))
     logger = logging.getLogger(logger_name)
     logger.info(option.dict2str(opt))
 
@@ -192,7 +189,8 @@ def main(json_path='options/train_dncnn.json'):
             # -------------------------------
             if current_step % opt['train']['checkpoint_print'] == 0:
                 logs = model.current_log()  # such as loss
-                message = '<epoch:{:3d}, iter:{:8,d}, lr:{:.3e}> '.format(epoch, current_step, model.current_learning_rate())
+                message = '<epoch:{:3d}, iter:{:8,d}, lr:{:.3e}> '.format(epoch, current_step,
+                                                                          model.current_learning_rate())
                 for k, v in logs.items():  # merge log information into message
                     message += '{:s}: {:.3e} '.format(k, v)
                 logger.info(message)
@@ -246,7 +244,8 @@ def main(json_path='options/train_dncnn.json'):
                 writer.add_scalar('test/psnr', total_avg_psnr, current_step)
 
                 # testing log
-                logger.info('<epoch:{:3d}, iter:{:8,d}, Average PSNR : {:<.2f}dB\n'.format(epoch, current_step, total_avg_psnr))
+                logger.info(
+                    '<epoch:{:3d}, iter:{:8,d}, Average PSNR : {:<.2f}dB\n'.format(epoch, current_step, total_avg_psnr))
                 torch.cuda.empty_cache()
 
             torch.cuda.empty_cache()

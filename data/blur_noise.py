@@ -1,8 +1,9 @@
+from math import pi
+from pathlib import Path
+
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 from numpy.random import uniform, triangular, beta
-from math import pi
-from pathlib import Path
 from scipy.signal import convolve
 
 # tiny error used for nummerical stability
@@ -95,7 +96,7 @@ class Kernel(object):
         self.x, self.y = self.SIZEx2
 
         # getting length of kernel diagonal
-        self.DIAGONAL = (self.x**2 + self.y**2)**0.5
+        self.DIAGONAL = (self.x ** 2 + self.y ** 2) ** 0.5
 
         # flag to see if kernel has been calculated already
         self.kernel_is_generated = False
@@ -128,7 +129,7 @@ class Kernel(object):
 
             # getting max length of blur motion
             self.MAX_PATH_LEN = 0.75 * self.DIAGONAL * \
-                (uniform() + uniform(0, self.INTENSITY**2))
+                                (uniform() + uniform(0, self.INTENSITY ** 2))
 
             # getting step
             steps = []
@@ -218,7 +219,7 @@ class Kernel(object):
         # convert complex path to final list of coordinate tuples
         self.path = [(i.real, i.imag) for i in self.path_complex]
 
-    def _create_kernel(self, save_to: Path=None, show: bool=False):
+    def _create_kernel(self, save_to: Path = None, show: bool = False):
         """[summary]
         Finds a kernel (psf) of given intensity.
         [description]
@@ -260,7 +261,7 @@ class Kernel(object):
         # flag that we have generated a kernel
         self.kernel_is_generated = True
 
-    def display_kernel(self, save_to: Path = None, show: bool=True):
+    def display_kernel(self, save_to: Path = None, show: bool = True):
         """[summary]
         Finds a kernel (psf) of given intensity.
         [description]
@@ -350,7 +351,6 @@ class Kernel(object):
             result_bands = ()
 
             for band in image.split():
-
                 # convolve each band individually with kernel
                 result_band = convolve(
                     band, self.kernel_matrix, mode=conv_mode).astype("uint8")

@@ -1,9 +1,9 @@
 import os
 
 import numpy as np
+import torch
 from PIL import Image
 from skimage.restoration import estimate_sigma
-import torch
 
 
 def check_BM3D():
@@ -71,11 +71,13 @@ def convert_imgs_to_tensor(img_path):
     img = torch.from_numpy(img)
     return img
 
+
 def load_image(path):
     """Load image from path"""
     img = Image.open(path)
     img = np.array(img, dtype=np.float32) / 255.0
     return img
+
 
 def rgb_to_one_channel(img):
     # img is a tensor of shape [3, H, W]
@@ -93,6 +95,7 @@ def rgb_to_one_channel(img):
     # add a dummy dimension
     y_img = y_img.unsqueeze(0)
     return y_img
+
 
 def estimate_noise(noisy_imgs, sigma_imgs_used):
     # Estimate noise level

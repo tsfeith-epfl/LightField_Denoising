@@ -1,11 +1,10 @@
-import os.path
 import random
+
 import numpy as np
 import torch
 import torch.utils.data as data
 import utils.utils_image as util
 import utils.utils_patch as patch
-from PIL import Image
 
 
 class DatasetDnCNN(data.Dataset):
@@ -80,7 +79,7 @@ class DatasetDnCNN(data.Dataset):
             # add noise
             # --------------------------------
             self.sigma = random.randint(0, 55)
-            noise = torch.randn(img_L.size()).mul_(self.sigma/255.0)
+            noise = torch.randn(img_L.size()).mul_(self.sigma / 255.0)
             img_L.add_(noise)
 
         else:
@@ -101,7 +100,7 @@ class DatasetDnCNN(data.Dataset):
                 self.sigma = 25
             else:
                 self.sigma = 50
-            img_L += np.random.normal(0, self.sigma/255.0, img_L.shape)
+            img_L += np.random.normal(0, self.sigma / 255.0, img_L.shape)
 
             # -------------------------------
             # HWC to CHW, numpy to tensor
@@ -110,5 +109,6 @@ class DatasetDnCNN(data.Dataset):
             img_H = util.uint2tensor3(imgs_H)
 
         return {'L': img_L, 'H': img_H[-3:], "SIGMA": self.sigma}
+
     def __len__(self):
         return len(self.path_scenes)

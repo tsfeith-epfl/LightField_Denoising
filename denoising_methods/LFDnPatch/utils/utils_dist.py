@@ -2,6 +2,7 @@
 import functools
 import os
 import subprocess
+
 import torch
 import torch.distributed as dist
 import torch.multiprocessing as mp
@@ -59,7 +60,6 @@ def _init_dist_slurm(backend, port=None):
     dist.init_process_group(backend=backend)
 
 
-
 # ----------------------------------
 # get rank and world_size
 # ----------------------------------
@@ -98,7 +98,6 @@ def get_world_size():
 
 
 def master_only(func):
-
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         rank, _ = get_dist_info()
@@ -106,10 +105,6 @@ def master_only(func):
             return func(*args, **kwargs)
 
     return wrapper
-
-
-
-
 
 
 # ----------------------------------
@@ -130,7 +125,7 @@ def reduce_sum(tensor):
 
 def gather_grad(params):
     world_size = get_world_size()
-    
+
     if world_size == 1:
         return
 
@@ -198,4 +193,3 @@ def reduce_loss_dict(loss_dict):
         reduced_losses = {k: v for k, v in zip(keys, losses)}
 
     return reduced_losses
-

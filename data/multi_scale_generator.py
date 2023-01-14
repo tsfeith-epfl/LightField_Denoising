@@ -1,8 +1,10 @@
 import argparse
-from PIL import Image
 import os
-from noise_generator import load_img_paths, generate_noisy_imgs, test_noise, phone_noise
+
+from PIL import Image
 from tqdm import tqdm
+
+from noise_generator import load_img_paths, generate_noisy_imgs, test_noise, phone_noise
 
 
 def rescale_imgs(imgs, scale):
@@ -10,7 +12,7 @@ def rescale_imgs(imgs, scale):
     print("Generating rescaled images for linear scale factor:", scale)
 
     # create new folder for the rescaled images
-    new_folder = os.path.join(os.path.dirname(imgs[0]) + "_" + f"{int(scale*1000)}")
+    new_folder = os.path.join(os.path.dirname(imgs[0]) + "_" + f"{int(scale * 1000)}")
     os.makedirs(new_folder, exist_ok=True)
 
     rescaled_paths = []
@@ -24,7 +26,7 @@ def rescale_imgs(imgs, scale):
         img_name = os.path.basename(img_path)
         img_name = img_name.split(".")[0]
         split_name = img_name.split("_")
-        split_name.insert(-2, f"{int(scale*1000)}")
+        split_name.insert(-2, f"{int(scale * 1000)}")
         img_name = "_".join(split_name)
         img_name = img_name + ".png"
         new_path = os.path.join(new_folder, img_name)

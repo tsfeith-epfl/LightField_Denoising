@@ -51,7 +51,7 @@ Go to the method folder via `cd ./denoising_methods/classical/LFBM5D`. Once in t
 
 ### DnCNN
 
-No set-up is required for this method. The implemented method was taken from the [original DnCNN implementation] 
+No set-up is required for this method. The implemented method was taken from the [original DnCNN implementation]
 (https://github.com/cszn/KAIR/).
 
 ### LFDnPatch
@@ -65,7 +65,7 @@ repository. To set-up the submodule, run the following commands:
 4. `git submodule init`
 5. `git submodule update`
 
-Once the submodule is set-up, it needs to be built. To do so, do the following (already inside the `LF-PatchMatch` 
+Once the submodule is set-up, it needs to be built. To do so, do the following (already inside the `LF-PatchMatch`
 folder):
 
 1. `mkdir build`

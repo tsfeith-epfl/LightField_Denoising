@@ -1,11 +1,13 @@
 import argparse
-import os
 import glob
-import utilities
-from quality_assessment import PSNR, SSIM, MSSSIM, VIF, DISTS
+import os
 from datetime import datetime
+
 import numpy as np
 from tqdm import tqdm
+
+import utilities
+from quality_assessment import PSNR, SSIM, MSSSIM, VIF, DISTS
 
 
 def write_results(metrics, metric_name, output_dir, full_results):

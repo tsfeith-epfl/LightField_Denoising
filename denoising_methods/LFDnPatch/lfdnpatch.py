@@ -3,11 +3,8 @@ import sys
 
 import numpy as np
 import torch
-from tqdm import tqdm
 
 sys.path.append('denoising_methods/LFDnPatch')
-
-from denoising_methods.LFDnPatch.utils import utils_image as util
 
 
 def lfdnpatch(noisy_img):

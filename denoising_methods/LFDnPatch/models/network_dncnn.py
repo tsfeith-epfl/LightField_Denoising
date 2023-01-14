@@ -1,8 +1,5 @@
-
-import torch.nn as nn
 import models.basicblock as B
-import torch
-
+import torch.nn as nn
 
 """
 # --------------------------------------------
@@ -63,11 +60,11 @@ class LFDnPatch(nn.Module):
 
         m_head = B.conv2D(in_nc,
                           nc,
-                          mode='C'+act_mode[-1],
+                          mode='C' + act_mode[-1],
                           bias=bias,
                           kernel_size=3,
                           padding=1)
-        m_body = [B.conv2D(nc, nc, mode='C'+act_mode, bias=bias, kernel_size=3, padding=1) for _ in range(nb-2)]
+        m_body = [B.conv2D(nc, nc, mode='C' + act_mode, bias=bias, kernel_size=3, padding=1) for _ in range(nb - 2)]
         m_tail = B.conv2D(nc, out_nc, mode='C', bias=bias, kernel_size=3, padding=1)
 
         self.model = B.sequential(m_head, *m_body, m_tail)
