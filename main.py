@@ -229,7 +229,7 @@ if __name__ == '__main__':
         print("Computing the Frankenpatches")
         p = Popen(
             f"./denoising_methods/LFDnPatch/LF-PatchMatch/build/PatchMatch {full_img_dir} {full_size[0]} {full_size[1]} {args.patch_size} {args.number_patches} {args.patch_stride} {args.search_space}",
-            stdout=PIPE)
+            stdout=PIPE, shell=True)
 
         end_time = time.time()
         with open(os.path.join(output_dir, "execution_time.txt"), "w") as f:
