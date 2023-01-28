@@ -228,11 +228,11 @@ if __name__ == '__main__':
         # run the executable ./denoising_methods/LFDnPatch/LF-PatchMatch/build/PatchMatch
         print("Computing the Frankenpatches")
         p = Popen(
-            f"./denoising_methods/LFDnPatch/LF-PatchMatch/build/PatchMatch {full_img_dir} {full_size[0]} {full_size[1]} {args.patch_size} {args.number_patches} {args.patch_stride} {args.search_space}",
+            f"./denoising_methods/LFDnPatch/LF-PatchMatch/build/PatchMatch {full_img_dir} {grid_x[1]} {grid_y[1]} {args.patch_size} {args.number_patches} {args.patch_stride} {args.search_space}",
             stdout=PIPE, shell=True)
 
         end_time = time.time()
-        with open(os.path.join(output_dir, "execution_time.txt"), "w") as f:
+        with open(os.path.join(output_dir, "execution_time.txt"), "a") as f:
             f.write(f"Patch matching time: {end_time - start_time} seconds\n")
 
         while p.poll() is None:
