@@ -2,8 +2,8 @@
 
 This repository contains the code for the student research project titled "Light field denoising using conventional and
 learning-based methods", under EPFL's MMPG lab. It performs a comparison between the conventional and learning-based
-methods for light field denoising. Two sources of noise are considered: Realistic Phone Camera Noise and Realistic
-Motion Blur. The results obtained are shown in the report included in this repository.
+methods for light field denoising. Two sources of noise are considered: Realistic Phone Camera Noise and Additive White
+Gaussian Noise. The results obtained are shown in the report included in this repository.
 
 ## Data Set-up Instructions
 
