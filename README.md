@@ -56,8 +56,11 @@ No set-up is required for this method. The implemented method was taken from the
 
 ### LFDnPatch
 
+The folder structure and the training routines are very strongly based on the original [original DnCNN implementation]
+(https://github.com/cszn/KAIR/), with some modifications to adapt it to the light field domain.
+
 The method relies on an auxiliary repo created for light field patch matching. It is set-up as a submodule in this
-repository. To set-up the submodule, run the following commands:
+repository. To set up the submodule, run the following commands:
 
 1. `cd denoising_methods/LFDnPatch`
 2. `git clone https://github.com/tsfeith-epfl/LF-PatchMatch.git`

@@ -16,7 +16,7 @@ def define_G(opt):
     opt_net = opt['netG']
     net_type = opt_net['net_type']
 
-    from models.network_dncnn import LFDnCNN as net
+    from models.network_dncnn import LFDnPatch as net
     netG = net(in_nc=opt_net['in_nc'],
                out_nc=opt_net['out_nc'],
                nc=opt_net['nc'],

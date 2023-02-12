@@ -26,19 +26,13 @@ class DatasetDnCNN(data.Dataset):
         self.opt = opt
         self.n_channels = opt['n_channels'] if opt['n_channels'] else 3
         self.patch_size = opt['H_size'] if opt['H_size'] else 256
-        self.frankenpatch_size = opt['frankenpatch_size'] if opt['frankenpatch_size'] else 96
-        self.frankenpatch_stride = opt['frankenpatch_stride'] if opt['frankenpatch_stride'] else 2
-        self.num_similars = opt['num_similars'] if opt['num_similars'] else 9
 
         self.path_scenes0 = util.get_scene_paths(opt['dataroot_H'])
-        self.path_scenes0 = [patch.gridify_images(scene) for scene in self.path_scenes]
-        self.path_scenes0 = np.array([patch.load_numpy_data(scene) for scene in self.path_scenes])
         self.path_scenes = []
-        for scene in self.path_scenes0:
-            for row in scene:
-                for image in row:
-                    self.path_scenes.append(image)
-        print(len(self.path_scenes))
+        if self.opt['phase'] == 'train':
+            self.update_dataset(5000)
+        else:
+            self.update_dataset(200)
 
     def __getitem__(self, index):
 
@@ -88,7 +82,8 @@ class DatasetDnCNN(data.Dataset):
             # get L/H image pairs
             # --------------------------------
             """
-            img_L = np.copy(imgs_H)
+            img_H = util.uint2tensor3(imgs_H)
+            img_L = img_H.clone()
 
             # --------------------------------
             # add noise
@@ -100,15 +95,18 @@ class DatasetDnCNN(data.Dataset):
                 self.sigma = 25
             else:
                 self.sigma = 50
-            img_L += np.random.normal(0, self.sigma / 255.0, img_L.shape)
+            noise = torch.randn(img_L.size()).mul_(self.sigma / 255.0)
+            img_L.add_(noise)
 
-            # -------------------------------
-            # HWC to CHW, numpy to tensor
-            # --------------------------------
-            img_L = util.uint2tensor3(img_L)
-            img_H = util.uint2tensor3(imgs_H)
 
         return {'L': img_L, 'H': img_H[-3:], "SIGMA": self.sigma}
 
     def __len__(self):
         return len(self.path_scenes)
+
+    def update_dataset(self, size):
+        print("Updating dataset...")
+        del self.path_scenes
+        torch.cuda.empty_cache()
+        self.path_scenes = random.sample(self.path_scenes0, size)
+        self.path_scenes = [np.load(img) for img in self.path_scenes]

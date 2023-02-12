@@ -159,8 +159,13 @@ def main(json_path='options/train_dncnn.json'):
 
     for epoch in range(1000000):  # keep running
         for i, train_data in enumerate(train_loader):
-
             current_step += 1
+            # -------------------------------
+            # 0) update dataset
+            # -------------------------------
+            if current_step % 7_500 == 0:
+                train_set.update_dataset(5000)
+
             # -------------------------------
             # 1) feed patch pairs
             # -------------------------------
@@ -208,6 +213,7 @@ def main(json_path='options/train_dncnn.json'):
             # 6) testing
             # -------------------------------
             if current_step % opt['train']['checkpoint_test'] == 0:
+                test_set.update_dataset(200)
 
                 avg_psnr = [[0.0, 0], [0.0, 0], [0.0, 0]]
                 idx = 0
@@ -235,6 +241,7 @@ def main(json_path='options/train_dncnn.json'):
                     else:
                         avg_psnr[2][0] += current_psnr
                         avg_psnr[2][1] += 1
+                    del visuals
 
                 avg_psnr = [avg_psnr[i][0] / avg_psnr[i][1] for i in range(3)]
                 total_avg_psnr = sum(avg_psnr) / 3

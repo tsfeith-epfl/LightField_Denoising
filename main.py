@@ -40,7 +40,7 @@ if __name__ == '__main__':
     parser.add_argument("--quality_metric",
                         type=str,
                         help="Image Quality Assessment metric to use",
-                        choices=["psnr", "ssim", "msssim", "vif", "dists", "all"])
+                        choices=["psnr", "ssim", "msssim", "vif", "all"])
     parser.add_argument("--IQA_full",
                         action="store_true",
                         help="If set, save the Image Quality Assessment metric for all images in the scene")
@@ -93,7 +93,7 @@ if __name__ == '__main__':
     if not os.path.isdir(img_dir):
         raise ValueError(
             "Directory `%s` does not exist, generate the noisy images using script `./data/noise_generator.py`" % img_dir)
-    noisy_imgs = glob.glob(os.path.join(img_dir, "[!.]*[!.txt]"))
+    noisy_imgs = glob.glob(os.path.join(img_dir, "[!.]*.png"))
     noisy_imgs = sorted(noisy_imgs)
 
     # Check if images are in the right format
@@ -219,6 +219,7 @@ if __name__ == '__main__':
 
         # get the full path for the directory with the noisy imgs
         full_img_dir = os.path.abspath(img_dir)
+        full_bin_dir = os.path.abspath("./denoising_methods/LFDnPatch/LF-PatchMatch/build/PatchMatch")
 
         # check if inside the noisy images folder there is another folder called "frankenpatches"
         # if not, create it
@@ -228,16 +229,16 @@ if __name__ == '__main__':
         # run the executable ./denoising_methods/LFDnPatch/LF-PatchMatch/build/PatchMatch
         print("Computing the Frankenpatches")
         p = Popen(
-            f"./denoising_methods/LFDnPatch/LF-PatchMatch/build/PatchMatch {full_img_dir} {grid_x[1]} {grid_y[1]} {args.patch_size} {args.number_patches} {args.patch_stride} {args.search_space}",
+            f"{full_bin_dir} {full_img_dir} {grid_x[1]} {grid_y[1]} {args.patch_size} {args.number_patches} {args.patch_stride} {args.search_space}",
             stdout=PIPE, shell=True)
-
-        end_time = time.time()
-        with open(os.path.join(output_dir, "execution_time.txt"), "a") as f:
-            f.write(f"Patch matching time: {end_time - start_time} seconds\n")
 
         while p.poll() is None:
             line = p.stdout.readline()
             print(line.decode("utf-8"), end='')
+
+        end_time = time.time()
+        with open(os.path.join(output_dir, "execution_time.txt"), "a") as f:
+            f.write(f"Patch matching time: {end_time - start_time} seconds\n")
 
         # modify the noisy image paths to take in the generated frankenpatches
         noisy_frankenpatches = []
@@ -262,7 +263,7 @@ if __name__ == '__main__':
 
     if args.quality_metric is not None:
         if args.quality_metric == 'all':
-            metrics = ['psnr', 'ssim', 'msssim', 'vif', 'dists']
+            metrics = ['psnr', 'ssim', 'msssim', 'vif']
         else:
             metrics = [args.quality_metric]
 

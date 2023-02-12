@@ -32,15 +32,13 @@ def get_scene_paths(dataroot):
     paths = []
     # get all directories inside dataroot
     for dir_ in os.listdir(dataroot):
-        tmp = []
         dir_ = os.path.join(dataroot, dir_, "frankenpatches")
         if os.path.isdir(dir_):
             # add all image inside dir_
             for path in os.listdir(dir_):
                 path = os.path.join(dir_, path)
                 if os.path.isfile(path) and path.endswith(".npy"):
-                    tmp.append(path)
-            paths.append(sorted(tmp))
+                    paths.append(path)
     return paths
 
 
@@ -77,6 +75,34 @@ def _get_paths_from_images(path):
                 images.append(img_path)
     assert images, '{:s} has no valid image file'.format(path)
     return images
+
+
+'''
+# --------------------------------------------
+# makedir
+# --------------------------------------------
+'''
+
+
+def mkdir(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+
+def mkdirs(paths):
+    if isinstance(paths, str):
+        mkdir(paths)
+    else:
+        for path in paths:
+            mkdir(path)
+
+
+def mkdir_and_rename(path):
+    if os.path.exists(path):
+        new_name = path + '_archived_' + get_timestamp()
+        print('Path already exists. Rename it to [{:s}]'.format(new_name))
+        os.rename(path, new_name)
+    os.makedirs(path)
 
 
 # --------------------------------------------
